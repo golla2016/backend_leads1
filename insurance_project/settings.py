@@ -30,7 +30,8 @@ DEBUG = True
 
 # ALLOWED_HOSTS = []
 
-ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS").split(" ")
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "localhost 127.0.0.1").split(" ")
+
 
 
 # Application definition
@@ -96,10 +97,13 @@ WSGI_APPLICATION = 'insurance_project.wsgi.application'
 #     }
 # }
 
+DATABASE_URL = "postgresql://django_db_wbuj_user:6oizX7ssF3MlWnwOFJ8U1Zyg8DzBMtG1@dpg-d07r6jpr0fns73dtbco0-a.oregon-postgres.render.com/django_db_wbuj"
+
 DATABASES = {
-    'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
+    "default": dj_database_url.parse(DATABASE_URL)
 }
 
+  
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators

@@ -10,6 +10,7 @@ from django.contrib.auth.hashers import make_password
 class AgentViewSet(viewsets.ModelViewSet):
     queryset = Agent.objects.all()
     serializer_class = AgentSerializer
+    
 
 class AgentBusinessViewSet(viewsets.ReadOnlyModelViewSet):  # ✅ ReadOnly to prevent modifications
     queryset = Agent.objects.prefetch_related("submissions").all()  # Optimized query

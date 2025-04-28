@@ -3,6 +3,7 @@ from .models import Agent
 from customerform.models import UserSubmission
 
 class AgentSerializer(serializers.ModelSerializer):
+    profile_picture = serializers.ImageField(required=False)
     class Meta:
         model = Agent
         fields = "__all__"
