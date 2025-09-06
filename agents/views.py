@@ -18,8 +18,15 @@ class AgentViewSet(viewsets.ModelViewSet):
 
 class AgentsListAPIView(APIView):
     def get(self, request):
+        service_account_json = os.environ.get("GOOGLE_SERVICE_ACCOUNT_JSON")
+        sheet_id = os.environ.get("GOOGLE_SHEET_ID")
+        # 🔎 Debug checks
+        if not service_account_json:
+            return Response({"error": "GOOGLE_SERVICE_ACCOUNT_JSON is missing"}, status=500)
+        if not sheet_id:
+            return Response({"error": "GOOGLE_SHEET_ID is missing"}, status=500)
         try: 
-            service_account_info = json.loads(os.environ.get("GOOGLE_SERVICE_ACCOUNT_JSON"))
+            service_account_info = json.loads(service_account_json)
             sheet_id = os.environ.get("GOOGLE_SHEET_ID")
             gc = gspread.service_account_from_dict(service_account_info)
             
@@ -29,7 +36,9 @@ class AgentsListAPIView(APIView):
             agents = [{"id": row[0], "first_name": row[1], "surname": row[2]} for row in rows[1:]]
             return Response(agents)
         except Exception as e:
-            return Response({"error": str(e)}, status=500)
+            return Response({"error": f"Invalid JSON format: {str(e)}"}, status=500)
+        # ✅ If we reached here, JSON is valid
+        return Response({"message": "Service account JSON loaded successfully!"})
 
 class AgentBusinessViewSet(viewsets.ReadOnlyModelViewSet):  # ✅ ReadOnly to prevent modifications
     queryset = Agent.objects.prefetch_related("submissions").all()  # Optimized query
