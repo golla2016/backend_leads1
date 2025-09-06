@@ -52,6 +52,7 @@ uritemplate==4.1.1
 urllib3==2.3.0
 whitenoise==6.9.0
 yarl==1.18.3
-gspread
-google-auth
+gspread==6.2.1
+google-auth==2.40.3
+
 
