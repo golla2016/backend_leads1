@@ -6,11 +6,26 @@ from .serializers import AgentSerializer, AgentBusinessSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.contrib.auth.hashers import make_password
+import gspread
+import json
+import os
+from rest_framework.views import APIView
+from rest_framework.response import Response
 
 class AgentViewSet(viewsets.ModelViewSet):
     queryset = Agent.objects.all()
     serializer_class = AgentSerializer
-    
+
+class AgentsListAPIView(APIView):
+    def get(self, request):
+        service_account_info = json.loads(os.environ.get("GOOGLE_SERVICE_ACCOUNT_JSON"))
+       sheet_id = os.environ.get("GOOGLE_SHEET_ID")
+        gc = gspread.service_account_from_dict(service_account_info)
+        
+        sh = gc.open_by_key(sheet_id)
+        rows = worksheet.get_all_values()
+        agents = [{"id": row[0], "first_name": row[1], "surname": row[2]} for row in rows[1:]]
+        return Response(agents)
 
 class AgentBusinessViewSet(viewsets.ReadOnlyModelViewSet):  # ✅ ReadOnly to prevent modifications
     queryset = Agent.objects.prefetch_related("submissions").all()  # Optimized query
