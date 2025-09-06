@@ -19,7 +19,7 @@ class AgentViewSet(viewsets.ModelViewSet):
 class AgentsListAPIView(APIView):
     def get(self, request):
         service_account_info = json.loads(os.environ.get("GOOGLE_SERVICE_ACCOUNT_JSON"))
-       sheet_id = os.environ.get("GOOGLE_SHEET_ID")
+        sheet_id = os.environ.get("GOOGLE_SHEET_ID")
         gc = gspread.service_account_from_dict(service_account_info)
         
         sh = gc.open_by_key(sheet_id)
