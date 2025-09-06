@@ -20,6 +20,7 @@ class AgentsListAPIView(APIView):
     def get(self, request):
         service_account_json = os.environ.get("GOOGLE_SERVICE_ACCOUNT_JSON")
         sheet_id = os.environ.get("GOOGLE_SHEET_ID")
+        print("DEBUG: SERVICE ACCOUNT JSON =", service_account_json)  # 👈 check what Django sees
         # 🔎 Debug checks
         if not service_account_json:
             return Response({"error": "GOOGLE_SERVICE_ACCOUNT_JSON is missing"}, status=500)
